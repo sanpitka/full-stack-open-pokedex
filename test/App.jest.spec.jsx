@@ -1,3 +1,4 @@
+/* global jest, describe, it, expect */
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import axiosMock from 'axios'
