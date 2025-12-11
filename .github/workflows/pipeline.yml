@@ -44,8 +44,6 @@ jobs:
         with:
           args: | 
             Build failed in {{ EVENT_PAYLOAD.repository.full_name }}!
-            commit {{ EVENT_PAYLOAD.head_commit.message }} by {{ EVENT_PAYLOAD.head_commit.author.username }} broke the build :(
-
 
 
   tag_release:
