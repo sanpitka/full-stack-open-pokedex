@@ -35,7 +35,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed :tada:'
       - name: Notify failure to Discord
         if: ${{ failure() }}
         env:
@@ -43,8 +43,7 @@ jobs:
         uses: Ilshidur/action-discord@master
         with:
           args: | 
-            Build failed in {{ EVENT_PAYLOAD.repository.full_name }}!
-
+            Build failed in {{ EVENT_PAYLOAD.repository.full_name }} :warning:
 
   tag_release:
     needs: simple_deployment_pipeline
