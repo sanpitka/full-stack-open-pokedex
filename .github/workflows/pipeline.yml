@@ -29,22 +29,20 @@ jobs:
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
       - name: Notify success to Discord
         if: ${{ success() && github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
-        uses: Ilshidur/action-discord@0.4.0
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@master
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          title: 'A new version of ${{ github.repository }} deployed! :tada:'
-          description: 'to ${{ github.ref }} by ${{ github.actor }}'
-          severity: info
+          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
       - name: Notify failure to Discord
         if: ${{ failure() }}
-        uses: Ilshidur/action-discord@0.4.0
+        uses: Ilshidur/action-discord@master
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          title: 'Build failed! :warning:'
-          description: | 
-            commit ${{ github.sha }} by ${{ github.actor }} broke the build :(
-            Error message: ${{ github.event.head_commit.message }}
-          severity: error
+          args: | 
+            Build failed!
+            commit {{ EVENT_PAYLOAD.github.sha }} by {{ EVENT_PAYLOAD.github.actor }} broke the build :(
+            Error message: {{ JOB_STATUS_MESSAGE }}
+
 
 
   tag_release:
