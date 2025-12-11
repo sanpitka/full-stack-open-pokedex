@@ -32,17 +32,16 @@ jobs:
         uses: rjstone/discord-webhook-notify@v2
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          message: | 
-            A new version of ${{ github.repository }} deployed! :tada:
-            to ${{ github.ref }} by ${{ github.actor }}
+          title: 'A new version of ${{ github.repository }} deployed! :tada:'
+          description: 'to ${{ github.ref }} by ${{ github.actor }}'
           severity: info
       - name: Notify failure to Discord
         if: ${{ failure() }}
         uses: rjstone/discord-webhook-notify@v2
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          message: | 
-            Build failed! :warning:
+          title: 'Build failed! :warning:'
+          description: | 
             commit ${{ github.sha }} by ${{ github.actor }} broke the build :(
             Error message: ${{ github.event.head_commit.message }}
           severity: error
