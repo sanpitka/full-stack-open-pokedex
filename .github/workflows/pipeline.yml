@@ -27,6 +27,26 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+      - name: Notify success to Discord
+        if: ${{ success() && github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
+        uses: rjstone/discord-webhook-notify@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          message: | 
+            A new version of ${{ github.repository }} deployed! :tada:
+            to ${{ github.ref }} by ${{ github.actor }}
+          severity: info
+      - name: Notify failure to Discord
+        if: ${{ failure() }}
+        uses: rjstone/discord-webhook-notify@v2
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          message: | 
+            Build failed! :warning:
+            commit ${{ github.sha }} by ${{ github.actor }} broke the build :(
+            Error message: ${{ github.event.head_commit.message }}
+          severity: error
+
 
   tag_release:
     needs: simple_deployment_pipeline
