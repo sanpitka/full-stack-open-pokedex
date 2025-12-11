@@ -15,6 +15,10 @@ const mapResults = (({ results }) => results.map(({ url, name }) => ({
 const App = () => {
   const match = useMatch('/pokemon/:name')
   const { data: pokemonList, error, isLoading } = useApi('https://pokeapi.co/api/v2/pokemon/?limit=50', mapResults)
+
+  // eslint-disable-next-line no-console
+  console.log('Unnecessary log to trigger redeployment')
+
   if (isLoading) {
     return <LoadingSpinner />
   }
