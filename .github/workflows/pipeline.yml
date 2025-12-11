@@ -29,7 +29,7 @@ jobs:
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
       - name: Notify success to Discord
         if: ${{ success() && github.event_name == 'push' && !contains(join(github.event.commits.*.message, ' '), '#skip') }}
-        uses: rjstone/discord-webhook-notify@v2
+        uses: Ilshidur/action-discord@0.4.0
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
           title: 'A new version of ${{ github.repository }} deployed! :tada:'
@@ -37,7 +37,7 @@ jobs:
           severity: info
       - name: Notify failure to Discord
         if: ${{ failure() }}
-        uses: rjstone/discord-webhook-notify@v2
+        uses: Ilshidur/action-discord@0.4.0
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
           title: 'Build failed! :warning:'
