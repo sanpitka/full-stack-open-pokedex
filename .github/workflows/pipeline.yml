@@ -33,17 +33,17 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed.'
+          args: 'A new version of {{ EVENT_PAYLOAD.repository.full_name }} deployed :tada:'
       - name: Notify failure to Discord
         if: ${{ failure() }}
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
           args: | 
-            Build failed!
-            commit {{ EVENT_PAYLOAD.github.sha }} by {{ EVENT_PAYLOAD.github.actor }} broke the build :(
-            Error message: {{ JOB_STATUS_MESSAGE }}
-
-
+            Build failed in {{ EVENT_PAYLOAD.repository.full_name }} :warning:
+            More info: {{ GITHUB_SERVER_URL }}/{{ GITHUB_REPOSITORY }}/actions/runs/{{ GITHUB_RUN_ID }}
+            
 
   tag_release:
     needs: simple_deployment_pipeline
