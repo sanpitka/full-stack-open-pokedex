@@ -22,8 +22,6 @@ jobs:
         run: npm run eslint
       - name: Build
         run: npm run build
-      - name: fail successfully
-        run: exit 1
       - name: Run tests
         run: npm test
       - name: Trigger deployment
@@ -35,7 +33,7 @@ jobs:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         uses: Ilshidur/action-discord@master
         with:
-          args: 'The project {{ EVENT_PAYLOAD.repository.full_name }} has been deployed :tada:'
+          args: 'A new version of {{ EVENT_PAYLOAD.repository.full_name }} deployed :tada:'
       - name: Notify failure to Discord
         if: ${{ failure() }}
         env:
